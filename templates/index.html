@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h1>File Manager</h1>
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search files and folders" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if current_path %}
+            <a href="{{ url_for('index', subpath='') }}" class="btn">Home</a>
+        {% endif %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <a href="?sort_by=name&order={{ 'desc' if sort_by == 'name' and order == 'asc' else 'asc' }}">
+                            Name
+                            {% if sort_by == 'name' %}
+                                {{ '↓' if order == 'desc' else '↑' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="?sort_by=size&order={{ 'desc' if sort_by == 'size' and order == 'asc' else 'asc' }}">
+                            Size
+                            {% if sort_by == 'size' %}
+                                {{ '↓' if order == 'desc' else '↑' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="?sort_by=date&order={{ 'desc' if sort_by == 'date' and order == 'asc' else 'asc' }}">
+                            Date
+                            {% if sort_by == 'date' %}
+                                {{ '↓' if order == 'desc' else '↑' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in files_and_folders %}
+                <tr>
+                    <td>
+                        {% if item.type == 'folder' %}
+                            <a href="{{ url_for('navigate', subpath=current_path ~ '/' ~ item.name) }}" class="folder">{{ item.name }}</a>
+                        {% else %}
+                            {{ item.name }}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.size if item.type == 'file' else '' }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>
+                        {% if item.type == 'file' %}
+                            <a href="/download/{{ current_path ~ '/' ~ item.name }}" class="btn">Download</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
