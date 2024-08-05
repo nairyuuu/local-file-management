@@ -10,8 +10,8 @@
 Edit the desired folder in config.py
 
 Install the python libraries needed:
-```bash
-pip install requirements.txt
+```shell
+pip install -r .\requirements.txt
 ```
 Run the server:
 ```bash
