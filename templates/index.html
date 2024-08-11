@@ -62,7 +62,7 @@
                     <td>{{ item.date }}</td>
                     <td>
                         {% if item.type == 'file' %}
-                            <a href="download{{ '/' + current_path ~ '/' ~ item.name }}" class="btn">Download</a>
+                        <a href="{{ url_for('download_file', filename=(((current_path + '/') if current_path != '' else '') ~ item.name)) }}" class="btn">Download</a>
                         {% endif %}
                     </td>
                 </tr>
